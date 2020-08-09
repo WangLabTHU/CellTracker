@@ -1,0 +1,98 @@
+
+<meta http-equiv="Content-Type"content="text/html;charset=utf-8">
+<html align='left'>
+<head>
+
+    <style type="text/css">
+
+        p {color:black; font-size: 15px;font-family: Verdana;}
+        h1 h2 {font-family: Verdana;}
+        .center {display: block; margin: 0 auto;}
+        .table-class {border-bottom: 2px solid;border-top: 2px solid;width: 100%;height: 50px;}
+        .table-class th {border-bottom: 1px solid;width: 16%;}
+        a {text-decoration:none;}
+        ul {
+            list-style-type: none;
+            margin-left: 2%;
+            padding-top: 2%;
+            padding-left: 1%;
+            padding-bottom: 2%;
+            width: 15%;
+            background-color: #f1f1f1;
+            border-radius: 5%;
+            line-height: 150%;
+            position: fixed;
+            overflow: auto;
+            float: right;
+        }
+        li a {
+            text-decoration:none;
+            font-family: Verdana;
+            font-size: 15px;
+            color: black;
+        }
+        li a:hover{
+            font-family: Verdana;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .contain-class {display: block; width: 70%;float: left;margin-left: 5%;}
+        .nav-class {width: 20%;float: right;position:fixed;margin-left: 75%;margin-top: 10%}
+
+    </style>
+</head>
+<body>
+<center>
+    <h1>The report of cell segmentation and tracking</h1>
+</center>
+<section class="contain-class">
+    <a name="Data information"></a>
+    <h2>Data information:</h2>   
+    <div style="text-align: left;">
+        <p>Frames Number : {{frame_num}} </p>
+        <p>Image Size : {{img_size}} </p>
+    </div>
+    <a name="Details information of cells"></a>
+    <h2>Details information of cells: </h2>  
+    <div style="text-align: left;">
+        <table class="table-class">
+        <tr>
+            <th>Instance ID</th>
+            <th>Start Frame</th>
+            <th>End Frame</th>
+            <th>Mean Area</th>
+            <th>Mean Intensity</th>
+            <th>Visual image</th>
+        </tr>
+    
+        {% for item in infos %}
+        <tr align='center'>
+            <td>{{ item.instance_id }}</td>
+            <td>{{ item.start_frame }}</td>
+            <td>{{ item.end_frame }}</td>
+            <td>{{ item.mean_area |round(2, 'floor') }}</td>
+            <td>{{ item.mean_intensity |round(2, 'floor') }}</td>
+            <td><a href="#{{ item.instance_id }}">Instance ID:{{ item.instance_id }}</a></td>
+        </tr>
+        {% endfor%}
+        </table>
+    </div>
+    <a name="Results visualization"></a>
+    <h2>Results visualization </h2>
+    <div style="text-align: center;">
+        {% for item in infos %}
+            <p>Instance ID: &nbsp; {{ item.instance_id }}</p> 
+            <a name="{{ item.instance_id }}"> <img src="{{ item.statis_img_path }}" width="70%"></a>
+            <br>
+        {% endfor%}
+    </div>
+</section>
+    <div class="nav-class">
+        <ul>
+        <li><a href="#Data information">Data information</a></li>
+        <li><a href="#Details information of cells">Details information of cells</a></li>
+        <li><a href="#Results visualization">Results visualization</a></li>
+        </ul>
+    </div>
+</body>
+</html>

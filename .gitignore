@@ -1,0 +1,22 @@
+# files
+*.DS_Store
+*.log
+*.pyc
+*.sh
+*.swp
+waiting_list.txt
+
+# folds
+
+# data/
+.idea
+debug_scripts
+log/*
+output/*
+pretrainmodel/*
+checkpoint/*
+*/__pycache__
+*/*/__pycache__
+__pycache__                                                                                
+training_demo1/log
+training_demo2/log
