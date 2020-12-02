@@ -8,7 +8,7 @@ from ..utils import instance_filtering
 
 
 def bgr_to_gray(img):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     return img
 
 

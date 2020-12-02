@@ -112,7 +112,7 @@ class InputOutput(QWidget):
         set_log_label.setContentsMargins(0, 0, 0, 0)
 
         log_folder_show_lineedit = QLineEdit()
-        log_folder_show_lineedit.setPlaceholderText("Label folder")
+        log_folder_show_lineedit.setPlaceholderText("Log folder")
         log_folder_show_lineedit.setEnabled(False)
         log_folder_show_lineedit.setStyleSheet("background: #454545;"
                                                "border: 0px;"

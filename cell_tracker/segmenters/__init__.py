@@ -1,12 +1,13 @@
 from __future__ import absolute_import
 from .customized.customized import CustomizedSegmentor
-from .tradition_methods.threshold import BinaryThresholding
+from .tradition_methods.threshold import BinaryThresholding, OtsuThresholding
 from .tradition_methods.watershed import WaterShed
 from .tradition_methods.grabcut import GrabCut
 from .unet import Unet
 
 __all__ = [
     'BinaryThresholding',
+    'OtsuThresholding',
     'WaterShed',
     'GrabCut',
     'Unet',
@@ -16,6 +17,7 @@ __all__ = [
 
 __SEGMENTER = {
     'binary_thresholding': BinaryThresholding,
+    'otsu_thresholding': OtsuThresholding,
     'water_shed': WaterShed,
     'grab_cut': GrabCut,
     'unet': Unet,

@@ -21,6 +21,7 @@ class NormalizeTools(QWidget):
 
     def setup_ui(self):
         self.init_equalize_hist()
+        self.init_clahe()
         self.init_min_max()
         self.init_retinex_MSRCP()
         self.init_retinex_MSRCR()
@@ -41,6 +42,18 @@ class NormalizeTools(QWidget):
         self.equalize_hist_tool_button.clicked.connect(
             self.equalize_hist_tool_button_fnc)
         self.equalize_hist_tool_button.setIcon(
+            QIcon(get_icon("Arrow_right.png")))
+
+        self.clahe_tool_button = QPushButton()
+        self.clahe_tool_button.setStyleSheet("background: #454545;"
+                                                     "font-family: Verdana;"
+                                                     "border: 0px;"
+                                                     "text-align:left;")
+        self.clahe_tool_button.setFixedHeight(20)
+        self.clahe_tool_button.setText("CLAHE")
+        self.clahe_tool_button.clicked.connect(
+            self.clahe_tool_button_fnc)
+        self.clahe_tool_button.setIcon(
             QIcon(get_icon("Arrow_right.png")))
 
         self.min_max_tool_button = QPushButton()
@@ -91,6 +104,9 @@ class NormalizeTools(QWidget):
         self.normalize_tools_layout.addWidget(self.equalize_hist_tool_button)
         self.normalize_tools_layout.addWidget(self.equalize_hist)
         self.equalize_hist.setVisible(False)
+        self.normalize_tools_layout.addWidget(self.clahe_tool_button)
+        self.normalize_tools_layout.addWidget(self.clahe)
+        self.clahe.setVisible(False)
         self.normalize_tools_layout.addWidget(self.min_max_tool_button)
         self.normalize_tools_layout.addWidget(self.min_max)
         self.min_max.setVisible(False)
@@ -136,6 +152,142 @@ class NormalizeTools(QWidget):
         self.equalize_hist = equalize_hist
         self.equalize_hist_label = equalize_hist_label
         self.equalize_hist_button = equalize_hist_button
+
+    def init_clahe(self):
+        clahe = QWidget()
+        clahe.setStyleSheet("border: 0px;"
+                                          "background: #323232;")
+
+        clahe_layout_main = QVBoxLayout(clahe)
+        clahe_layout1 = QHBoxLayout()
+        clahe_layout11 = QHBoxLayout()
+        clahe_layout2 = QHBoxLayout()
+        clahe_layout22 = QHBoxLayout()
+        clahe_layout3 = QHBoxLayout()
+        clahe_layout33 = QHBoxLayout()
+        clahe_layout4 = QHBoxLayout()
+
+        clip_limit_sld = QSlider(Qt.Horizontal)
+        clip_limit_sld.setMinimum(0)
+        clip_limit_sld.setMaximum(100)
+        clip_limit_sld.setValue(2)
+        clip_limit_sld.setStyleSheet(self.sld_stylesheet)
+        clip_limit_sld.valueChanged.connect(self.sld2text1)
+
+        clip_limit_label = QLabel()
+        clip_limit_label.setText("Clip limit")
+        clip_limit_label.setAlignment(Qt.AlignCenter)
+        clip_limit_label.setStyleSheet("font-family: Verdana;"
+                                     "color: white;")
+
+        clip_limit_textline = QLineEdit()
+        clip_limit_textline.setAlignment(Qt.AlignCenter)
+        clip_limit_textline.setFixedSize(50, 15)
+        clip_limit_textline.setValidator(QIntValidator())
+        clip_limit_textline.setText("2")
+        clip_limit_textline.setStyleSheet("background: #454545;"
+                                        "border: 0px;"
+                                        "color: white;"
+                                        "border-radius: 5px;"
+                                        "font-family: Verdana;")
+        clip_limit_textline.textEdited.connect(self.text2sld1)
+
+        grid_width_sld = QSlider(Qt.Horizontal)
+        grid_width_sld.setMinimum(1)
+        grid_width_sld.setMaximum(50)
+        grid_width_sld.setValue(8)
+        grid_width_sld.setStyleSheet(self.sld_stylesheet)
+        grid_width_sld.valueChanged.connect(self.sld2text2)
+
+        grid_width_label = QLabel()
+        grid_width_label.setText("Grid width")
+        grid_width_label.setAlignment(Qt.AlignCenter)
+        grid_width_label.setStyleSheet("font-family: Verdana;"
+                                       "color: white;")
+
+        grid_width_textline = QLineEdit()
+        grid_width_textline.setAlignment(Qt.AlignCenter)
+        grid_width_textline.setFixedSize(50, 15)
+        grid_width_textline.setValidator(QIntValidator())
+        grid_width_textline.setText("8")
+        grid_width_textline.setStyleSheet("background: #454545;"
+                                          "border: 0px;"
+                                          "color: white;"
+                                          "border-radius: 5px;"
+                                          "font-family: Verdana;")
+        grid_width_textline.textEdited.connect(self.text2sld2)
+
+        grid_height_sld = QSlider(Qt.Horizontal)
+        grid_height_sld.setMinimum(1)
+        grid_height_sld.setMaximum(50)
+        grid_height_sld.setValue(8)
+        grid_height_sld.setStyleSheet(self.sld_stylesheet)
+        grid_height_sld.valueChanged.connect(self.sld2text3)
+
+        grid_height_label = QLabel()
+        grid_height_label.setText("Grid height")
+        grid_height_label.setAlignment(Qt.AlignCenter)
+        grid_height_label.setStyleSheet("font-family: Verdana;"
+                                       "color: white;")
+
+        grid_height_textline = QLineEdit()
+        grid_height_textline.setAlignment(Qt.AlignCenter)
+        grid_height_textline.setFixedSize(50, 15)
+        grid_height_textline.setValidator(QIntValidator())
+        grid_height_textline.setText("8")
+        grid_height_textline.setStyleSheet("background: #454545;"
+                                          "border: 0px;"
+                                          "color: white;"
+                                          "border-radius: 5px;"
+                                          "font-family: Verdana;")
+        grid_height_textline.textEdited.connect(self.text2sld3)
+
+        clahe_button = QPushButton()
+        clahe_button.setFixedSize(60, 20)
+        clahe_button.setText("Run")
+        clahe_button.setStyleSheet("background: #454545;"
+                                              "color: white;"
+                                              "border-radius: 5px;"
+                                              "font-family: Verdana;")
+
+        clahe_layout1.addWidget(clip_limit_label)
+        clahe_layout1.setAlignment(Qt.AlignLeft)
+        clahe_layout11.addWidget(clip_limit_sld)
+        clahe_layout11.addWidget(clip_limit_textline)
+
+        clahe_layout2.addWidget(grid_width_label)
+        clahe_layout2.setAlignment(Qt.AlignLeft)
+        clahe_layout22.addWidget(grid_width_sld)
+        clahe_layout22.addWidget(grid_width_textline)
+
+        clahe_layout3.addWidget(grid_height_label)
+        clahe_layout3.setAlignment(Qt.AlignLeft)
+        clahe_layout33.addWidget(grid_height_sld)
+        clahe_layout33.addWidget(grid_height_textline)
+        clahe_layout4.addWidget(clahe_button)
+        clahe_layout4.setAlignment(Qt.AlignRight)
+
+        clahe_layout_main.addLayout(clahe_layout1)
+        clahe_layout_main.addLayout(clahe_layout11)
+        clahe_layout_main.addLayout(clahe_layout2)
+        clahe_layout_main.addLayout(clahe_layout22)
+        clahe_layout_main.addLayout(clahe_layout3)
+        clahe_layout_main.addLayout(clahe_layout33)
+        clahe_layout_main.addLayout(clahe_layout4)
+        clahe_layout_main.setAlignment(Qt.AlignTop)
+
+        self.clahe = clahe
+        self.clip_limit_sld = clip_limit_sld
+        self.clip_limit_label = clip_limit_label
+        self.clip_limit_textline = clip_limit_textline
+        self.grid_width_sld = grid_width_sld
+        self.grid_width_label = grid_width_label
+        self.grid_width_textline = grid_width_textline
+        self.grid_height_sld = grid_height_sld
+        self.grid_height_label = grid_height_label
+        self.grid_height_textline = grid_height_textline
+
+        self.clahe_button = clahe_button
 
     def init_min_max(self):
         min_max = QWidget()
@@ -281,6 +433,26 @@ class NormalizeTools(QWidget):
                                                          "text-align:left;"
                                                          "color: #FFFFFF")
 
+    def clahe_tool_button_fnc(self):
+        if self.clahe.isVisible():
+            self.clahe.setVisible(False)
+            self.clahe_tool_button.setIcon(
+                QIcon(get_icon("Arrow_right.png")))
+            self.clahe_tool_button.setStyleSheet("background: #454545;"
+                                                         "font-family: Verdana;"
+                                                         "border: 0px;"
+                                                         "text-align:left;"
+                                                         "color: #000000")
+        else:
+            self.clahe.setVisible(True)
+            self.clahe_tool_button.setIcon(
+                QIcon(get_icon("Arrow_down.png")))
+            self.clahe_tool_button.setStyleSheet("background: #454545;"
+                                                         "font-family: Verdana;"
+                                                         "border: 0px;"
+                                                         "text-align:left;"
+                                                         "color: #FFFFFF")
+
     def min_max_tool_button_fnc(self):
         if self.min_max.isVisible():
             self.min_max.setVisible(False)
@@ -359,3 +531,27 @@ class NormalizeTools(QWidget):
                                                      "border: 0px;"
                                                      "text-align:left;"
                                                      "color: #FFFFFF")
+
+    def sld2text1(self):
+        f = self.clip_limit_sld.value()
+        self.clip_limit_textline.setText(str(f))
+
+    def text2sld1(self):
+        t = self.clip_limit_textline.text()
+        self.clip_limit_sld.setValue(int(t))
+
+    def sld2text2(self):
+        f = self.grid_width_sld.value()
+        self.grid_width_textline.setText(str(f))
+
+    def text2sld2(self):
+        t = self.grid_width_textline.text()
+        self.grid_width_sld.setValue(int(t))
+
+    def sld2text3(self):
+        f = self.grid_height_sld.value()
+        self.grid_height_textline.setText(str(f))
+
+    def text2sld3(self):
+        t = self.grid_height_textline.text()
+        self.grid_height_sld.setValue(int(t))

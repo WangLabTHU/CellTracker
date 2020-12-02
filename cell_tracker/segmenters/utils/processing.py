@@ -7,12 +7,12 @@ import numpy as np
 
 
 def bgr_to_gray(img):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     return img
 
 
 def gray_to_bgr(img):
-    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
     return img
 
 

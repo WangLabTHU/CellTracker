@@ -19,7 +19,7 @@ from ..utils import instance_filtering
 
 
 class Unet:
-    def __init__(self, model_path, minimal_size=0, threshold=0.5, scale_img=0.5, device='cpu'):
+    def __init__(self, model_path, minimal_size=0, threshold=0.5, scale_img=1.0, device='cpu'):
         if torch.cuda.is_available() and device == 'gpu':
             self._device = 'cuda'
         else:

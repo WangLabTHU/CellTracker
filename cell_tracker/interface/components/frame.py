@@ -19,11 +19,12 @@ class Instance(object):
     6) name, name in front end 
     """
 
-    def __init__(self, frame_id, label_id, name=None, raw_img=None):
+    def __init__(self, frame_id, label_id, name=None, raw_img=None, norm_img=None):
 
         self._frame_id = frame_id
         self._label_id = label_id
         self._raw_img = raw_img
+        self._norm_img = norm_img
 
         self._coords = None
         self._bbox = None
@@ -32,6 +33,7 @@ class Instance(object):
         self._edge = None
         self._centroid = None
         self._intensity = None
+        self._norm_intensity = None
 
         if name is None:
             self._name = "cell_" + str(label_id)
@@ -41,6 +43,10 @@ class Instance(object):
     @property
     def intensity(self):
         return self._intensity
+    
+    @property
+    def norm_intensity(self):
+        return self._norm_intensity
 
     @property
     def raw_img(self):
@@ -49,6 +55,14 @@ class Instance(object):
     @raw_img.setter
     def raw_img(self, raw_img):
         self._raw_img = raw_img
+        
+    @property
+    def norm_img(self):
+        return self._norm_img
+
+    @norm_img.setter
+    def norm_img(self, norm_img):
+        self._norm_img = norm_img
 
     @property
     def label_id(self):
@@ -119,6 +133,8 @@ class Instance(object):
         self._area = np.shape(self._coords)[1]
         self._intensity = np.sum(
             self._raw_img[coords[0], coords[1], :]) / (self._raw_img.shape[-1] * self._area)
+        self._norm_intensity = np.sum(
+            self._norm_img[coords[0], coords[1], :]) / (self._norm_img.shape[-1] * self._area)
         self._edge = self._find_edge_coordinates(
             x_max=x2, y_max=y2, coords=coords)
 
@@ -312,7 +328,7 @@ class Frame(object):
                     self._color_map_dict[int(label)] = color
                 self._color_map.append(color)
                 instance = Instance(
-                    self._frame_id, label_id=label, raw_img=self._raw_img)
+                    self._frame_id, label_id=label, raw_img=self._raw_img, norm_img=self._norm_img)
                 instance.color = color
                 instance.coords = np.where(self._label_img == label)
 
@@ -336,7 +352,7 @@ class Frame(object):
             self._color_map.append(c_color[r])
             self._color_map_dict[int(label)] = c_color[r]
             instance = Instance(
-                self._frame_id, label_id=label, raw_img=self._raw_img)
+                self._frame_id, label_id=label, raw_img=self._raw_img, norm_img=self._norm_img)
             instance.color = c_color[r]
             instance.coords = np.where(self._label_img == label)
 
@@ -358,7 +374,7 @@ class Frame(object):
             for ins_id, ins_label, ins_name, ins_color in \
                     zip(update_ins_id, update_ins_label, update_ins_name, update_ins_color):
                 instance = Instance(
-                    frame_id=self.frame_id, label_id=ins_label, name=ins_name, raw_img=self.raw_img)
+                    frame_id=self.frame_id, label_id=ins_label, name=ins_name, raw_img=self.raw_img, norm_img=self._norm_img)
                 self._color_map[ins_id+1] = ins_color
                 self._color_map_dict[ins_label] = ins_color
                 instance.color = ins_color
@@ -395,7 +411,7 @@ class Frame(object):
             for ins_id, ins_label, ins_name, ins_color in \
                     zip(update_ins_id, update_ins_label, update_ins_name, update_ins_color):
                 instance = Instance(
-                    frame_id=self.frame_id, label_id=ins_label, name=ins_name, raw_img=self.raw_img)
+                    frame_id=self.frame_id, label_id=ins_label, name=ins_name, raw_img=self.raw_img, norm_img=self._norm_img)
                 self._color_map[ins_id+1] = ins_color
                 self._color_map_dict[ins_label] = ins_color
                 instance.color = ins_color

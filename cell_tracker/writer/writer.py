@@ -75,30 +75,37 @@ class Writer(Visualization):
         results = []
         for label_id in list(instance_info_label_id.keys()):
             ins_info = instance_info_label_id[label_id]
-            row_names.extend(['instance_%s_area' %
-                              label_id, 'instance_%s_intensity' % label_id])
+            row_names.extend(['instance_%s_area' % label_id, 
+                              'instance_%s_intensity' % label_id,
+                              'instance_%s_norm_intensity' % label_id])
             instances_map = ins_info['instances']
             instensities = []
+            norm_instensities = []
             areas = []
             filter_areas = []
             filter_intensities = []
+            filter_norm_intensities = []
             filter_frame_index = []
             for frame_index in range(self.frame_num):
                 try:
                     ins = instances_map[frame_index]
                     instensities.append(ins.intensity)
+                    norm_instensities.append(ins.norm_intensity)
                     areas.append(ins.area)
                     filter_frame_index.append(frame_index)
                     filter_intensities.append(ins.intensity)
+                    filter_norm_intensities.append(ins.norm_intensity)
                     filter_areas.append(ins.area)
                 except KeyError:
                     instensities.append(None)
+                    norm_instensities.append(None)
                     areas.append(None)
             # output result with null value
-            results.append(instensities)
             results.append(areas)
+            results.append(instensities)
+            results.append(norm_instensities)
 
-            # output plot with filte none value
+            # output plot with filter none value
             mean_intensity = [area * instensity for area,
                               instensity in zip(filter_areas, filter_intensities)]
             mean_intensity = float(np.sum(mean_intensity)) / \

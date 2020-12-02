@@ -32,6 +32,7 @@ class SegmentTools(QWidget):
 
     def setup_ui(self):
         self.init_seg1()
+        self.init_seg11()
         self.init_seg2()
         self.init_seg3()
         self.init_seg4()
@@ -52,6 +53,18 @@ class SegmentTools(QWidget):
         self.segment_algorithm1_tool_button.clicked.connect(
             self.segment_algorithm1_tool_button_fnc)
         self.segment_algorithm1_tool_button.setIcon(
+            QIcon(get_icon("Arrow_right.png")))
+
+        self.segment_algorithm11_tool_button = QPushButton()
+        self.segment_algorithm11_tool_button.setStyleSheet("background: #454545;"
+                                                          "font-family: Verdana;"
+                                                          "border: 0px;"
+                                                          "text-align:left;")
+        self.segment_algorithm11_tool_button.setFixedHeight(20)
+        self.segment_algorithm11_tool_button.setText("OtsuThreshold")
+        self.segment_algorithm11_tool_button.clicked.connect(
+            self.segment_algorithm11_tool_button_fnc)
+        self.segment_algorithm11_tool_button.setIcon(
             QIcon(get_icon("Arrow_right.png")))
 
         self.segment_algorithm2_tool_button = QPushButton()
@@ -106,6 +119,10 @@ class SegmentTools(QWidget):
             self.segment_algorithm1_tool_button)
         self.segment_tools_layout.addWidget(self.segment_algorithm1)
         self.segment_algorithm1.setVisible(False)
+        self.segment_tools_layout.addWidget(
+            self.segment_algorithm11_tool_button)
+        self.segment_tools_layout.addWidget(self.segment_algorithm11)
+        self.segment_algorithm11.setVisible(False)
         self.segment_tools_layout.addWidget(
             self.segment_algorithm2_tool_button)
         self.segment_tools_layout.addWidget(self.segment_algorithm2)
@@ -229,6 +246,110 @@ class SegmentTools(QWidget):
         self.thresh_min_size_left_button = thresh_min_size_left_button
         self.thresh_min_size_right_button = thresh_min_size_right_button
 
+    def init_seg11(self):
+        segment_algorithm11 = QWidget()
+        segment_algorithm11.setStyleSheet("border: 0px;"
+                                         "background: #323232;")
+
+        segment_algorithm11_layout = QVBoxLayout(segment_algorithm11)
+        segment_algorithm11_layout1 = QHBoxLayout()
+        segment_algorithm11_layout2 = QHBoxLayout()
+        segment_algorithm11_layout3 = QHBoxLayout()
+
+        thresh_sld11 = QSlider(Qt.Horizontal)
+        thresh_sld11.setMinimum(0)
+        thresh_sld11.setMaximum(255)
+        thresh_sld11.setValue(129)
+        thresh_sld11.setStyleSheet(self.sld_stylesheet)
+        thresh_sld11.valueChanged.connect(self.sld2text11)
+
+        thresh_label11 = QLabel()
+        thresh_label11.setText("Threshold(0~255)")
+        thresh_label11.setAlignment(Qt.AlignCenter)
+        thresh_label11.setStyleSheet("font-family: Verdana;"
+                                    "color: white;")
+
+        thresh_textline11 = QLineEdit()
+        thresh_textline11.setAlignment(Qt.AlignCenter)
+        thresh_textline11.setFixedSize(50, 15)
+        thresh_textline11.setValidator(QIntValidator())
+        thresh_textline11.setText("129")
+        thresh_textline11.setStyleSheet("background: #454545;"
+                                       "border: 0px;"
+                                       "color: white;"
+                                       "border-radius: 5px;"
+                                       "font-family: Verdana;")
+        thresh_textline11.textEdited.connect(self.text2sld11)
+
+        thresh_min_size_label11 = QLabel()
+        thresh_min_size_label11.setText("Minimal size:")
+        thresh_min_size_label11.setAlignment(Qt.AlignLeft)
+        thresh_min_size_label11.setStyleSheet("font-family: Verdana;"
+                                            "color: white;")
+
+        thresh_min_size_editor11 = QLineEdit()
+        thresh_min_size_editor11.setFixedSize(QSize(50, 20))
+        thresh_min_size_editor11.setAlignment(Qt.AlignCenter)
+        thresh_min_size_editor11.setText(str(0))
+        thresh_min_size_editor11.setValidator(QIntValidator())
+        thresh_min_size_editor11.setStyleSheet("background: #545454;"
+                                             "border: 0px;"
+                                             "border-radius: 3px;"
+                                             "color: white;")
+
+        thresh_min_size_left_button11 = QPushButton()
+        thresh_min_size_left_button11.setIcon(QIcon((get_icon("left.png"))))
+        thresh_min_size_left_button11.setIconSize(QSize(15, 15))
+        thresh_min_size_left_button11.setFixedSize(QSize(15, 15))
+        thresh_min_size_left_button11.setFlat(True)
+        thresh_min_size_left_button11.setStyleSheet(self.qtooltips_stylesheet)
+        thresh_min_size_left_button11.clicked.connect(self.min_size_left_fnc11)
+
+        thresh_min_size_right_button11 = QPushButton()
+        thresh_min_size_right_button11.setIcon(QIcon((get_icon("right.png"))))
+        thresh_min_size_right_button11.setIconSize(QSize(15, 15))
+        thresh_min_size_right_button11.setFixedSize(QSize(15, 15))
+        thresh_min_size_right_button11.setFlat(True)
+        thresh_min_size_right_button11.setStyleSheet(self.qtooltips_stylesheet)
+        thresh_min_size_right_button11.clicked.connect(self.min_size_right_fnc11)
+
+        thresh_min_size_layout11 = QHBoxLayout()
+        thresh_min_size_layout11.addWidget(thresh_min_size_label11)
+        thresh_min_size_layout11.addWidget(thresh_min_size_left_button11)
+        thresh_min_size_layout11.addWidget(thresh_min_size_editor11)
+        thresh_min_size_layout11.addWidget(thresh_min_size_right_button11)
+
+        thresh_segment_button11 = QPushButton()
+        thresh_segment_button11.setFixedSize(180, 20)
+        thresh_segment_button11.setText("OtsuThreshold")
+        thresh_segment_button11.setStyleSheet("background: #454545;"
+                                            "color: white;"
+                                            "border-radius: 5px;"
+                                            "font-family: Verdana;")
+
+        segment_algorithm11_layout1.addWidget(thresh_label11)
+        segment_algorithm11_layout1.setAlignment(Qt.AlignLeft)
+        segment_algorithm11_layout2.addWidget(thresh_sld11)
+        segment_algorithm11_layout2.addWidget(thresh_textline11)
+        segment_algorithm11_layout2.setAlignment(Qt.AlignCenter)
+        segment_algorithm11_layout3.addWidget(thresh_segment_button11)
+        segment_algorithm11_layout3.setAlignment(Qt.AlignRight)
+
+        # segment_algorithm11_layout.addLayout(segment_algorithm11_layout1)
+        # segment_algorithm11_layout.addLayout(segment_algorithm11_layout2)
+        segment_algorithm11_layout.addLayout(thresh_min_size_layout11)
+        segment_algorithm11_layout.addLayout(segment_algorithm11_layout3)
+        segment_algorithm11_layout.setAlignment(Qt.AlignTop)
+
+        self.segment_algorithm11 = segment_algorithm11
+        self.thresh_sld11 = thresh_sld11
+        self.thresh_label11 = thresh_label11
+        self.thresh_textline11 = thresh_textline11
+        self.thresh_segment_button11 = thresh_segment_button11
+        self.thresh_min_size_editor11 = thresh_min_size_editor11
+        self.thresh_min_size_left_button11 = thresh_min_size_left_button11
+        self.thresh_min_size_right_button11 = thresh_min_size_right_button11
+
     def init_seg2(self):
         segment_algorithm2 = QWidget()
         segment_algorithm2.setStyleSheet("border: 0px;"
@@ -266,7 +387,7 @@ class SegmentTools(QWidget):
                                           "font-family: Verdana;")
 
         device_label = QLabel()
-        device_label.setText("GPU number:")
+        device_label.setText("GPU or CPU:")
         device_label.setStyleSheet("font-family: Verdana;"
                                    "color: white;")
 
@@ -646,6 +767,8 @@ class SegmentTools(QWidget):
         self.iteration_sld = iteration_sld
         self.iteration_textline = iteration_textline
 
+
+
     def init_user_defined(self):
         segment_algorithm5 = QWidget()
         segment_algorithm5.setStyleSheet("border: 0px;"
@@ -708,6 +831,14 @@ class SegmentTools(QWidget):
         t = self.thresh_textline1.text()
         self.thresh_sld1.setValue(int(t))
 
+    def sld2text11(self):
+        f = self.thresh_sld11.value()
+        self.thresh_textline11.setText(str(f))
+
+    def text2sld11(self):
+        t = self.thresh_textline11.text()
+        self.thresh_sld11.setValue(int(t))
+
     def sld2text2(self):
         f = self.thresh_sld2.value()/10
         self.thresh_textline2.setText(str(f))
@@ -768,12 +899,41 @@ class SegmentTools(QWidget):
                                                               "text-align:left;"
                                                               "color: #FFFFFF")
 
+    def segment_algorithm11_tool_button_fnc(self):
+        if self.segment_algorithm11.isVisible():
+            self.segment_algorithm11.setVisible(False)
+            self.segment_algorithm11_tool_button.setIcon(
+                QIcon(get_icon("Arrow_right.png")))
+            self.segment_algorithm11_tool_button.setStyleSheet("background: #454545;"
+                                                              "font-family: Verdana;"
+                                                              "border: 0px;"
+                                                              "text-align:left;"
+                                                              "color: #000000")
+        else:
+            self.segment_algorithm11.setVisible(True)
+            self.segment_algorithm11_tool_button.setIcon(
+                QIcon(get_icon("Arrow_down.png")))
+            self.segment_algorithm11_tool_button.setStyleSheet("background: #454545;"
+                                                              "font-family: Verdana;"
+                                                              "border: 0px;"
+                                                              "text-align:left;"
+                                                              "color: #FFFFFF")
+
     def min_size_left_fnc1(self):
         v = int(self.thresh_min_size_editor.text())
         if v > 1:
             self.thresh_min_size_editor.setText(str(v - 1))
 
     def min_size_right_fnc1(self):
+        v = int(self.thresh_min_size_editor.text())
+        self.thresh_min_size_editor.setText(str(v + 1))
+
+    def min_size_left_fnc11(self):
+        v = int(self.thresh_min_size_editor.text())
+        if v > 1:
+            self.thresh_min_size_editor.setText(str(v - 1))
+
+    def min_size_right_fnc11(self):
         v = int(self.thresh_min_size_editor.text())
         self.thresh_min_size_editor.setText(str(v + 1))
 
